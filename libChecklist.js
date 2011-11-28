@@ -223,35 +223,3 @@ function showTasks( /* task_array */ ) {
     clearChildren("tasks")
     document.getElementById("tasks").appendChild( createTaskList( arguments ) )
 }
-
-function showMainQuest() {
-    showTasks( TASKS["MQ"] )
-}
-
-
-function showSideQuests() {
-    showTasks( TASKS["SQ"] )
-}
-
-
-function showCharts() {
-    showTasks( TASKS["CT"] )
-}
-
-
-function showTreasures() {
-    showTasks( TASKS["CH"] )
-}
-
-function showHearts() {
-    showTasks( TASKS["HP"] )
-}
-
-function showRupees() {
-    showTasks( TASKS["RP"] )
-}
-
-function showEverything() {
-    showTasks( TASKS["MQ"], TASKS["SQ"], TASKS["ST"], TASKS["CH"], TASKS["HP"], TASKS["RP"], TASKS["CT"] )
-}
-
