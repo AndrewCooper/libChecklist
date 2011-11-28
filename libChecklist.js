@@ -223,3 +223,7 @@ function showTasks( /* task_array */ ) {
     clearChildren("tasks")
     document.getElementById("tasks").appendChild( createTaskList( arguments ) )
 }
+
+var ROOT = new Task( "" )
+var TASKS = {}
+var SECTORS = {}
