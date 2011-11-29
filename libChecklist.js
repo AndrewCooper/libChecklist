@@ -158,18 +158,95 @@ function clearChildren( elementID ) {
     }
 }
 
-function createTaskList( task_array ) {
-    var taskList = document.createElement( "ul" );
-    taskList.className = "task-ul";
+function createTaskTable( task_array ) {
+    var taskTable = document.createElement( "table" );
+    taskTable.setAttribute( "border", "1" );
+    taskTable.className = "task-table";
+    var rows = new Array();
     for( idx in task_array ) {
         var task = task_array[idx];
-        var subItem = document.createElement( "li" );
-        subItem.className = "task-li";
-        subItem.id = generateListItemId( task.id );
-        subItem.appendChild( createTaskDiv( task.id ) );
-        taskList.appendChild( subItem );
+        rows = rows.concat( createTaskRows( task ) );
     }
-    return taskList;
+    for( idx in rows ) {
+        taskTable.appendChild( rows[idx] );
+    }
+    return taskTable;
+}
+
+function createTaskRows( task, indent ) {
+    var rows = new Array();
+
+    if( !indent ) {
+        indent = 0;
+    }
+
+    if( task.location == null ) {
+        rows.push( createTaskCategoryRow( task, indent ) );
+    } else {
+        rows.push( createTaskDescriptionRow( task, indent ) );
+        if( task.details ) {
+            rows.push( createTaskDetailsRow( task, indent + 1 ) );
+        }
+    }
+
+    for( idx in task.subtasks ) {
+        rows = rows.concat( createTaskRows( task.subtasks[idx], indent + 1 ) );
+    }
+
+    return rows;
+}
+
+function createTaskCategoryRow( task, indent ) {
+    var row = document.createElement( "tr" );
+
+    var check = document.createElement( "td" );
+    check.className = "task-category";
+    check.appendChild( createTaskCheck( task.id ) );
+    row.appendChild( check );
+
+    var sector = document.createElement( "td" );
+    sector.className = "task-category";
+    sector.colSpan = 2;
+    sector.appendChild( createTaskLabel( task.id, task.details, indent ) );
+    row.appendChild( sector );
+
+    return row;
+}
+
+function createTaskDescriptionRow( task, indent ) {
+    var row = document.createElement( "tr" );
+
+    var check = document.createElement( "td" );
+    check.className = "task-description";
+    check.appendChild( createTaskCheck( task.id ) );
+    row.appendChild( check );
+
+    var reward = document.createElement( "td" );
+    reward.className = "task-description";
+    reward.appendChild( createTaskLabel( task.id, task.reward, indent ) );
+    row.appendChild( reward );
+
+    var location = document.createElement( "td" );
+    location.className = "task-description";
+    location.appendChild( createTaskLabel( task.id, task.location, 0 ) );
+    row.appendChild( location );
+
+    return row;
+}
+
+function createTaskDetailsRow( task, indent ) {
+    var row = document.createElement( "tr" );
+
+    var check = document.createElement( "td" );
+    check.appendChild( document.createTextNode( " " ) );
+    row.appendChild( check );
+
+    var details = document.createElement( "td" );
+    details.colSpan = 2;
+    details.appendChild( createTaskLabel( task.id, task.details, indent ) );
+    row.appendChild( details );
+
+    return row;
 }
 
 function createTaskCheck( task_id ) {
@@ -189,31 +266,15 @@ function createTaskCheck( task_id ) {
     return taskCheck;
 }
 
-function createTaskLabel( task_id ) {
-    var task = TASKS[task_id];
+function createTaskLabel( task_id, text, indent ) {
     var taskLabel = document.createElement( "label" );
     taskLabel.id = generateLabelId( task_id );
     taskLabel.className = "task-label";
     taskLabel.setAttribute( "for", generateCheckboxId( task_id ) );
-    if( task.reward == null ) {
-        taskLabel.textContent = task.details;
-    } else {
-        taskLabel.textContent = task.reward;
-    }
-    return taskLabel
-}
-
-function createTaskDiv( task_id ) {
-    var task = TASKS[task_id];
-    var taskDiv = document.createElement( "div" );
-    taskDiv.className = "task-div";
-    taskDiv.id = generateDivId( task_id );
-    taskDiv.appendChild( createTaskCheck( task_id ) );
-    taskDiv.appendChild( createTaskLabel( task_id ) );
-    if( task.subtasks.length > 0 ) {
-        taskDiv.appendChild( createTaskList( task.subtasks ) );
-    }
-    return taskDiv;
+    taskLabel.style.marginLeft = indent + "em";
+    taskLabel.style.marginRight = "2em";
+    taskLabel.textContent = text;
+    return taskLabel;
 }
 
 function showTasks( /* task_array */ ) {
