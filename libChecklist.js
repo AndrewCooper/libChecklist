@@ -129,7 +129,8 @@ function addTask( id, aliasid, reward, sector, location, details ) {
 
 function applyLocalStorage() {
     if( !localStorage ) {
-        alert( "This browser does not support the LocalStorage feature of HTML5. " + "Data cannot be saved. Please consider updating your browser." );
+        alert( "This browser does not support the LocalStorage feature of HTML5. "
+             + "Data cannot be saved. Please consider updating your browser." );
     }
 
     for( var i = 0; i < localStorage.length; i++ ) {
