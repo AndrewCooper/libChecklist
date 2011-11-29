@@ -53,8 +53,9 @@ Task.prototype.update = function () {
     if( this != ROOT ) {
         for( var idx in this.aliases ) {
             var element = document.getElementById( generateCheckboxId( this.aliases[idx] ) )
-            if( element )
-                element.checked = this.completed
+            if (element) {
+                element.checked = this.completed;
+            }
             parentForId( this.aliases[idx] ).update()
         }
     }
