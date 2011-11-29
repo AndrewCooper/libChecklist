@@ -62,33 +62,33 @@ Task.prototype.update = function () {
 
 // HTML IDENTIFIER GENERATORS
 function generateCheckboxId( objectId ) {
-    return objectId+"/check"
+    return objectId + "/check"
 }
 
 function generateDivId( objectId ) {
-    return objectId+"/div"
+    return objectId + "/div"
 }
 
 function generateLabelId( objectId ) {
-    return objectId+"/label"
+    return objectId + "/label"
 }
 
 function generateListId( objectId ) {
-    return objectId+"/ul"
+    return objectId + "/ul"
 }
 
 function generateListItemId( objectId ) {
-    return objectId+"/li"
+    return objectId + "/li"
 }
 
 function parentForId( task_id ) {
-    var id_comps = task_id.split("/")
+    var id_comps = task_id.split( "/" )
     var leaf = id_comps.pop()
 
     if( id_comps.length == 0 ) {
         return ROOT
     } else {
-        return TASKS[id_comps.join("/")]
+        return TASKS[id_comps.join( "/" )]
     }
 }
 
@@ -103,12 +103,12 @@ function addTask( id, aliasid, reward, sector, location, details ) {
     if( aliasid && TASKS[aliasid] ) {
         task = TASKS[aliasid]
         // Sanity check aliasing task
-        if( (reward   && reward   != task.reward)
-         || (sector   && sector   != task.sector)
-         || (location && location != task.location)
-         || (details  && details  != task.details) )
+        if( ( reward   && ( reward   != task.reward   ) )
+         || ( sector   && ( sector   != task.sector   ) )
+         || ( location && ( location != task.location ) )
+         || ( details  && ( details  != task.details  ) ) )
         {
-            alert( id + " is not idential to " + aliasid + ". Will not alias.")
+            alert( id + " is not idential to " + aliasid + ". Will not alias." )
             return
         }
         task.aliases.push( id )
@@ -128,11 +128,11 @@ function addTask( id, aliasid, reward, sector, location, details ) {
 
 function applyLocalStorage() {
     if( !localStorage ) {
-        alert( "This browser does not support the LocalStorage feature of HTML5. Data cannot be saved. Please consider updating your browser." )
+        alert( "This browser does not support the LocalStorage feature of HTML5. " + "Data cannot be saved. Please consider updating your browser." )
     }
 
     for( var i = 0; i < localStorage.length; i++ ) {
-        var key = localStorage.key(i)
+        var key = localStorage.key( i )
         if( key == null ) {
             continue
         }
@@ -147,7 +147,7 @@ function applyLocalStorage() {
 }
 
 function clearChildren( elementID ) {
-    var element = document.getElementById(elementID)
+    var element = document.getElementById( elementID )
     if( !element ) {
         return
     }
@@ -158,11 +158,11 @@ function clearChildren( elementID ) {
 }
 
 function createTaskList( task_array ) {
-    var taskList = document.createElement("ul")
+    var taskList = document.createElement( "ul" )
     taskList.className = "task-ul"
     for( idx in task_array ) {
         var task = task_array[idx]
-        var subItem = document.createElement("li")
+        var subItem = document.createElement( "li" )
         subItem.className = "task-li"
         subItem.id = generateListItemId( task.id )
         subItem.appendChild( createTaskDiv( task.id ) )
@@ -173,14 +173,16 @@ function createTaskList( task_array ) {
 
 function createTaskCheck( task_id ) {
     var task = TASKS[task_id]
-    var taskCheck = document.createElement("input")
+    var taskCheck = document.createElement( "input" )
     taskCheck.id = generateCheckboxId( task_id )
     taskCheck.type = "checkbox"
     taskCheck.className = "task-check"
     if( task.subtasks.length > 0 ) {
         taskCheck.disabled = true
     } else {
-        taskCheck.onclick = function() { task.check() }
+        taskCheck.onclick = function () {
+            task.check()
+        }
     }
     taskCheck.checked = task.completed
     return taskCheck
@@ -188,7 +190,7 @@ function createTaskCheck( task_id ) {
 
 function createTaskLabel( task_id ) {
     var task = TASKS[task_id]
-    var taskLabel = document.createElement("label")
+    var taskLabel = document.createElement( "label" )
     taskLabel.id = generateLabelId( task_id )
     taskLabel.className = "task-label"
     taskLabel.setAttribute( "for", generateCheckboxId( task_id ) )
@@ -202,7 +204,7 @@ function createTaskLabel( task_id ) {
 
 function createTaskDiv( task_id ) {
     var task = TASKS[task_id]
-    var taskDiv = document.createElement("div")
+    var taskDiv = document.createElement( "div" )
     taskDiv.className = "task-div"
     taskDiv.id = generateDivId( task_id )
     taskDiv.appendChild( createTaskCheck( task_id ) )
@@ -214,8 +216,8 @@ function createTaskDiv( task_id ) {
 }
 
 function showTasks( /* task_array */ ) {
-    clearChildren("tasks")
-    document.getElementById("tasks").appendChild( createTaskList( arguments ) )
+    clearChildren( "tasks" )
+    document.getElementById( "tasks" ).appendChild( createTaskTable( arguments ) )
 }
 
 var ROOT = new Task( "" )
