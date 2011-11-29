@@ -8,16 +8,10 @@
     this.completed = false
     this.subtasks = []
     this.aliases = [ id ]
-
-    // METHODS
-    this.check = Task__check
-    this.isComplete = Task__isComplete
-    this.save = Task__save
-    this.update = Task__update
 }
 
 // TASK METHODS
-function Task__check( value ) {
+Task.prototype.check = function ( value ) {
     if( value ) {
         this.completed = ( value == true )
     } else {
@@ -27,7 +21,7 @@ function Task__check( value ) {
     this.save()
 }
 
-function Task__isComplete() {
+Task.prototype.isComplete = function () {
     var allComplete = true
 
     if( this.subtasks.length > 0 ) {
@@ -41,7 +35,7 @@ function Task__isComplete() {
     return allComplete
 }
 
-function Task__save() {
+Task.prototype.save = function () {
     if( !localStorage ) {
         return
     }
@@ -53,7 +47,7 @@ function Task__save() {
     }
 }
 
-function Task__update() {
+Task.prototype.update = function () {
     this.completed = this.isComplete()
 
     if( this != ROOT ) {
