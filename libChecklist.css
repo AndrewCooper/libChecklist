@@ -1,0 +1,32 @@
+div#map {
+    width: 400px;
+    height: 400px;
+    float: left;
+    background-color: blue;
+    margin: 10px;
+    }
+
+div#tasks {
+    margin: 10px;
+    float: left;
+    }
+
+td.task-key {
+    width:25%;
+    }
+
+div.task-key {
+    text-align: right;
+    padding-right: 0.5em;
+    margin-left: 2em;
+    background-color: LightGray;
+    }
+
+div.task-value {
+    text-align: left;
+    background-color: LightGreen;
+    }
+
+.task-title {
+    background-color: LightSkyBlue;
+    }
