@@ -1,9 +1,10 @@
-﻿function Task( id, reward, sector, location, details ) {
+﻿function Task( id, reward, sector, location, title, details ) {
     // PROPERTIES
     this.id = id;
     this.sector = sector;
     this.reward = reward;
     this.location = location;
+    this.title = title;
     this.details = details;
     this.completed = false;
     this.subtasks = [];
@@ -93,7 +94,7 @@ function parentForId( task_id ) {
     }
 }
 
-function addTask( id, aliasid, reward, sector, location, details ) {
+function addTask( id, aliasid, reward, sector, location, title, details ) {
     var task;
 
     if( TASKS[id] != null ) {
@@ -107,6 +108,7 @@ function addTask( id, aliasid, reward, sector, location, details ) {
         if( ( reward   && ( reward   != task.reward   ) )
          || ( sector   && ( sector   != task.sector   ) )
          || ( location && ( location != task.location ) )
+         || ( title    && ( title    != task.title    ) )
          || ( details  && ( details  != task.details  ) ) )
         {
             alert( id + " is not idential to " + aliasid + ". Will not alias." );
@@ -114,7 +116,7 @@ function addTask( id, aliasid, reward, sector, location, details ) {
         }
         task.aliases.push( id );
     } else {
-        var task = new Task( id, reward, sector, location, details );
+        var task = new Task( id, reward, sector, location, title, details );
     }
 
     var parent = parentForId( id );
