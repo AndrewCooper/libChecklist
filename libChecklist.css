@@ -17,6 +17,7 @@ td.task-key {
 
 div.task-key {
     text-align: right;
+    padding-left: 0.5em;
     padding-right: 0.5em;
     margin-left: 2em;
     background-color: LightGray;
@@ -25,8 +26,12 @@ div.task-key {
 div.task-value {
     text-align: left;
     background-color: LightGreen;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     }
 
-.task-title {
+div.task-title {
     background-color: LightSkyBlue;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
     }

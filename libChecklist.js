@@ -308,7 +308,7 @@ function createTaskTitle( task_id, text, indent ) {
     var taskTitleDiv = document.createElement( "div" );
     taskTitleDiv.className = "task-title";
     taskTitleDiv.style.marginLeft = indent + "em";
-    taskTitleDiv.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    taskTitleDiv.appendChild( createTaskLabel( task_id, text, 0 ) );
     return taskTitleDiv;
 }
 
@@ -316,15 +316,14 @@ function createTaskKey( task_id, text, indent ) {
     var taskLabel = document.createElement( "div" );
     taskLabel.className = "task-key";
     taskLabel.style.marginLeft = indent + "em";
-    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    taskLabel.appendChild( createTaskLabel( task_id, text, 0 ) );
     return taskLabel;
 }
 
 function createTaskValue( task_id, text, indent ) {
     var taskLabel = document.createElement( "div" );
     taskLabel.className = "task-value";
-    // taskLabel.style.marginLeft = indent + "em";
-    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    taskLabel.appendChild( createTaskLabel( task_id, text, 0 ) );
     return taskLabel;
 }
 
@@ -332,7 +331,7 @@ function createTaskDetails( task_id, text, indent ) {
     var taskLabel = document.createElement( "div" );
     taskLabel.className = "task-value";
     taskLabel.style.marginLeft = indent + "em";
-    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    taskLabel.appendChild( createTaskLabel( task_id, text, 0 ) );
     return taskLabel;
 }
 
