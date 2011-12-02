@@ -171,7 +171,8 @@ function createTaskTable( task_array ) {
         rows = rows.concat( createTaskRows( task ) );
     }
     for( idx in rows ) {
-        taskTable.appendChild( rows[idx] );
+        if( rows[idx] )
+            taskTable.appendChild( rows[idx] );
     }
     return taskTable;
 }
@@ -183,14 +184,10 @@ function createTaskRows( task, indent ) {
         indent = 0;
     }
 
-    if( task.location == null ) {
-        rows.push( createTaskCategoryRow( task, indent ) );
-    } else {
-        rows.push( createTaskDescriptionRow( task, indent ) );
-        if( task.details ) {
-            rows.push( createTaskDetailsRow( task, indent + 1 ) );
-        }
-    }
+    rows.push( createTaskTitleRow( task, indent ) );
+    rows.push( createTaskDetailsRow( task, indent + 1 ) );
+    rows.push( createTaskLocationRow( task, indent + 1 ) );
+    rows.push( createTaskRewardRow( task, indent + 1 ) );
 
     for( idx in task.subtasks ) {
         rows = rows.concat( createTaskRows( task.subtasks[idx], indent + 1 ) );
@@ -199,55 +196,93 @@ function createTaskRows( task, indent ) {
     return rows;
 }
 
-function createTaskCategoryRow( task, indent ) {
+function createTaskTitleRow( task, indent ) {
     var row = document.createElement( "tr" );
 
     var check = document.createElement( "td" );
-    check.className = "task-category";
+    check.className = "task-check";
     check.appendChild( createTaskCheck( task.id ) );
     row.appendChild( check );
 
-    var sector = document.createElement( "td" );
-    sector.className = "task-category";
-    sector.colSpan = 2;
-    sector.appendChild( createTaskLabel( task.id, task.details, indent ) );
-    row.appendChild( sector );
+    var title = document.createElement( "td" );
+    title.colSpan = 2;
+    var titleText;
+    if( task.title )
+        titleText = createTaskTitle( task.id, task.title, indent );
+    else if( task.reward )
+        titleText = createTaskTitle( task.id, task.reward, indent );
+    else
+        titleText = createTaskTitle( task.id, task.id, indent );
+    title.appendChild( titleText );
+    row.appendChild( title );
 
     return row;
 }
 
-function createTaskDescriptionRow( task, indent ) {
+function createTaskLocationRow( task, indent ) {
+    if( task.location == null )
+        return null;
+
     var row = document.createElement( "tr" );
 
     var check = document.createElement( "td" );
-    check.className = "task-description";
-    check.appendChild( createTaskCheck( task.id ) );
+    check.className = "task-check";
+    check.innerHTML = "&nbsp;";
     row.appendChild( check );
 
-    var reward = document.createElement( "td" );
-    reward.className = "task-description";
-    reward.appendChild( createTaskLabel( task.id, task.reward, indent ) );
-    row.appendChild( reward );
+    var key = document.createElement( "td" );
+    key.className = "task-key";
+    key.appendChild( createTaskKey( task.id, "Location:", indent ) );
+    row.appendChild( key );
 
-    var location = document.createElement( "td" );
-    location.className = "task-description";
-    location.appendChild( createTaskLabel( task.id, task.location, 0 ) );
-    row.appendChild( location );
+    var value = document.createElement( "td" );
+    value.className = "task-value";
+    value.appendChild( createTaskValue( task.id, task.location, indent ) );
+    row.appendChild( value );
+
+    return row;
+}
+
+function createTaskRewardRow( task, indent ) {
+    if( task.reward == null )
+        return null;
+
+    var row = document.createElement( "tr" );
+
+    var check = document.createElement( "td" );
+    check.className = "task-check";
+    check.innerHTML = "&nbsp;";
+    row.appendChild( check );
+
+    var key = document.createElement( "td" );
+    key.className = "task-key";
+    key.appendChild( createTaskKey( task.id, "Reward:", indent ) );
+    row.appendChild( key );
+
+    var value = document.createElement( "td" );
+    value.className = "task-value";
+    value.appendChild( createTaskValue( task.id, task.reward, indent ) );
+    row.appendChild( value );
 
     return row;
 }
 
 function createTaskDetailsRow( task, indent ) {
+    if( task.details == null )
+        return null;
+
     var row = document.createElement( "tr" );
 
     var check = document.createElement( "td" );
-    check.appendChild( document.createTextNode( " " ) );
+    check.className = "task-check";
+    check.innerHTML = "&nbsp;";
     row.appendChild( check );
 
-    var details = document.createElement( "td" );
-    details.colSpan = 2;
-    details.appendChild( createTaskLabel( task.id, task.details, indent ) );
-    row.appendChild( details );
+    var value = document.createElement( "td" );
+    value.className = "task-value";
+    value.colSpan = 2;
+    value.appendChild( createTaskDetails( task.id, task.details, indent ) );
+    row.appendChild( value );
 
     return row;
 }
@@ -269,13 +304,44 @@ function createTaskCheck( task_id ) {
     return taskCheck;
 }
 
+function createTaskTitle( task_id, text, indent ) {
+    var taskTitleDiv = document.createElement( "div" );
+    taskTitleDiv.className = "task-title";
+    taskTitleDiv.style.marginLeft = indent + "em";
+    taskTitleDiv.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    return taskTitleDiv;
+}
+
+function createTaskKey( task_id, text, indent ) {
+    var taskLabel = document.createElement( "div" );
+    taskLabel.className = "task-key";
+    taskLabel.style.marginLeft = indent + "em";
+    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    return taskLabel;
+}
+
+function createTaskValue( task_id, text, indent ) {
+    var taskLabel = document.createElement( "div" );
+    taskLabel.className = "task-value";
+    // taskLabel.style.marginLeft = indent + "em";
+    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    return taskLabel;
+}
+
+function createTaskDetails( task_id, text, indent ) {
+    var taskLabel = document.createElement( "div" );
+    taskLabel.className = "task-value";
+    taskLabel.style.marginLeft = indent + "em";
+    taskLabel.appendChild( createTaskLabel( task_id, text, "0.5" ) );
+    return taskLabel;
+}
+
 function createTaskLabel( task_id, text, indent ) {
     var taskLabel = document.createElement( "label" );
     taskLabel.id = generateLabelId( task_id );
     taskLabel.className = "task-label";
     taskLabel.setAttribute( "for", generateCheckboxId( task_id ) );
     taskLabel.style.marginLeft = indent + "em";
-    taskLabel.style.marginRight = "2em";
     taskLabel.textContent = text;
     return taskLabel;
 }
